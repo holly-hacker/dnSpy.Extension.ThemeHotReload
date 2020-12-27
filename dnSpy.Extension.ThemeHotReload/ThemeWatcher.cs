@@ -7,15 +7,16 @@ using System.Xml.Linq;
 using dnSpy.Contracts.App;
 using dnSpy.Contracts.Extension;
 using dnSpy.Contracts.Themes;
+using HoLLy.dnSpyExtension.ThemeHotReload.FileWatchers;
 
 namespace HoLLy.dnSpyExtension.ThemeHotReload
 {
     [ExportAutoLoaded(LoadType = AutoLoadedLoadType.AppLoaded)]
-    public class ThemeWatcher : IAutoLoaded
+    public class ThemeWatcher : IAutoLoaded, IDisposable
     {
         private readonly IAppWindow _appWindow;
         private readonly IThemeService _themeService;
-        private readonly FileSystemWatcher _watcher;
+        private readonly MultiplePathWatcher _watcher;
 
         [ImportingConstructor]
         public ThemeWatcher(IAppWindow appWindow, IThemeService themeService)
@@ -23,33 +24,30 @@ namespace HoLLy.dnSpyExtension.ThemeHotReload
             _appWindow = appWindow;
             _themeService = themeService;
 
-            // TODO: account for multiple paths
-            var path = AppDirectories.GetDirectories("Themes").First()!;
-            _watcher = new FileSystemWatcher(path);
-            _watcher.Changed += WatcherOnChanged;
-            _watcher.EnableRaisingEvents = true;
+            var paths = AppDirectories.GetDirectories("Themes");
+            _watcher = new DebouncedMultiplePathWatcher(paths, OnFileChanged, TimeSpan.FromSeconds(0.2));
 
             MsgBox.Instance.Show("Loaded!\n");
         }
 
-        private void WatcherOnChanged(object sender, FileSystemEventArgs e)
+        public void Dispose() => _watcher.Dispose();
+
+        private void OnFileChanged(string path)
         {
             _appWindow.MainWindow.Dispatcher.Invoke(() =>
             {
-                // TODO: debounce reading
-                Thread.Sleep(200);
                 XDocument doc;
                 try
                 {
-                    doc = XDocument.Load(e.FullPath);
+                    doc = XDocument.Load(path);
                 }
                 catch (Exception exception)
                 {
                     MsgBox.Instance.Show(exception);
                     return;
                 }
-                var theme = ReflectionHelper.LoadTheme(doc.Root!);
 
+                var theme = ReflectionHelper.LoadTheme(doc.Root!);
                 ReflectionHelper.SetTheme(_themeService, theme);
             });
         }

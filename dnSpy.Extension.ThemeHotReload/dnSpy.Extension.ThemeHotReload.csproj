@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <!-- Imports dnlib version -->
-    <Import Project="../dnSpy/DnSpyCommon.props"/>
+    <Import Project="../dnSpy/DnSpyCommon.props" />
 
     <PropertyGroup>
         <Title>ThemeHotReload Extension</Title>
@@ -31,7 +31,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\dnSpy\dnSpy\dnSpy.Contracts.DnSpy\dnSpy.Contracts.DnSpy.csproj" Private="false"/>
+        <ProjectReference Include="..\dnSpy\dnSpy\dnSpy.Contracts.DnSpy\dnSpy.Contracts.DnSpy.csproj" Private="false" />
     </ItemGroup>
 
 </Project>
