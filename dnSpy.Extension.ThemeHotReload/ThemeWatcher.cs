@@ -1,8 +1,5 @@
 using System;
 using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using System.Threading;
 using System.Xml.Linq;
 using dnSpy.Contracts.App;
 using dnSpy.Contracts.Extension;
@@ -25,9 +22,7 @@ namespace HoLLy.dnSpyExtension.ThemeHotReload
             _themeService = themeService;
 
             var paths = AppDirectories.GetDirectories("Themes");
-            _watcher = new DebouncedMultiplePathWatcher(paths, OnFileChanged, TimeSpan.FromSeconds(0.2));
-
-            MsgBox.Instance.Show("Loaded!\n");
+            _watcher = new DebouncedMultiplePathWatcher(paths, OnFileChanged, TimeSpan.FromSeconds(0.5));
         }
 
         public void Dispose() => _watcher.Dispose();
@@ -43,7 +38,7 @@ namespace HoLLy.dnSpyExtension.ThemeHotReload
                 }
                 catch (Exception exception)
                 {
-                    MsgBox.Instance.Show(exception);
+                    MsgBox.Instance.Show(exception, "Reading updated theme failed");
                     return;
                 }
 
