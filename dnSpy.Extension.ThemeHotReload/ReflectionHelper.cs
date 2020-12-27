@@ -25,5 +25,15 @@ namespace HoLLy.dnSpyExtension.ThemeHotReload
             var theme = ctor.Invoke(new object[] {element})!;
             return (ITheme) theme;
         }
+
+        public static void SetTheme(IThemeService themeService, ITheme theme)
+        {
+            var prop = themeService.GetType().GetProperty("Theme");
+
+            if (prop is not null)
+                prop.SetValue(themeService, theme);
+            else
+                throw new Exception("Couldn't find Theme property on theme service");
+        }
     }
 }

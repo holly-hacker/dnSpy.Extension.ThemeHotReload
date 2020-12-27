@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Xml.Linq;
 using dnSpy.Contracts.App;
 using dnSpy.Contracts.Extension;
@@ -35,17 +36,21 @@ namespace HoLLy.dnSpyExtension.ThemeHotReload
         {
             _appWindow.MainWindow.Dispatcher.Invoke(() =>
             {
-                // TODO: debounce
+                // TODO: debounce reading
+                Thread.Sleep(200);
+                XDocument doc;
                 try
                 {
-                    var doc = XDocument.Load(e.FullPath);
-                    var theme = ReflectionHelper.LoadTheme(doc.Root!);
-                    MsgBox.Instance.Show($"{e.FullPath}\n{theme}");
+                    doc = XDocument.Load(e.FullPath);
                 }
                 catch (Exception exception)
                 {
                     MsgBox.Instance.Show(exception);
+                    return;
                 }
+                var theme = ReflectionHelper.LoadTheme(doc.Root!);
+
+                ReflectionHelper.SetTheme(_themeService, theme);
             });
         }
     }
