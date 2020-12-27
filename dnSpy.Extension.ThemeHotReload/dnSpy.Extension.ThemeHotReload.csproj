@@ -1,7 +1,37 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+    <!-- Imports dnlib version -->
+    <Import Project="../dnSpy/DnSpyCommon.props"/>
+
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <Title>ThemeHotReload Extension</Title>
+        <Description>A dnSpy extension to hot-reload themes</Description>
+        <Authors>HoLLy</Authors>
+        <Copyright>Copyright © HoLLy 2020</Copyright>
+        <FileVersion>0.1.0.0</FileVersion>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
+
+        <PackageVersion>0.1.0</PackageVersion>
+        <PackageProjectUrl>https://github.com/HoLLy-HaCKeR/dnSpy.Extension.ThemeHotReload</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/HoLLy-HaCKeR/dnSpy.Extension.ThemeHotReload/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <RepositoryUrl>https://github.com/HoLLy-HaCKeR/dnSpy.Extension.ThemeHotReload.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+
+        <AssemblyName>dnSpy.Extension.ThemeHotReload.x</AssemblyName>
+        <RootNamespace>HoLLy.dnSpyExtension.ThemeHotReload</RootNamespace>
+
+        <LangVersion>9</LangVersion>
+        <NullableContextOptions>enable</NullableContextOptions>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+
+        <!-- Turn nullability warnings into errors -->
+        <WarningsAsErrors>CS8600;CS8602;CS8603;CS8604</WarningsAsErrors>
     </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\dnSpy\dnSpy\dnSpy.Contracts.DnSpy\dnSpy.Contracts.DnSpy.csproj" Private="false"/>
+    </ItemGroup>
 
 </Project>
